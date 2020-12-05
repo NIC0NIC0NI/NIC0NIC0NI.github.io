@@ -1,0 +1,56 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>凯尔希生成器</title>
+<script type="text/javascript">
+
+let begin = [
+    "博士，你在质疑我对{topic}的理解吗？要知道早在{year}年前我就开始了对{topic}的研究，而你在这方面毫无建树。"
+];
+
+let middle = [
+    "我不确定你是否真的想了解{topic}，或是将它遗忘在了某个角落，或者，我十分怀疑你并没有失去对它的掌控，你只是假装遗忘了{topic}，而你借此与我交谈。",
+    "不论你认为{topic}的现况如何，它又能对{randA}的{randB}产生什么影响呢？你真的认为{topic}可以改变这一切吗？相反，它什么也做不到，而我们还有些许微小的力量，去改变{randA}的{randB}。"
+];
+
+let listA = ["泰拉大陆","罗德岛","你","阿米娅","我们"];
+
+let listB = ["过去","未来","成长","道路","明天","归宿","命运"];
+
+
+function random_number(min, max) { return Math.floor(min + (max - min) * Math.random()); }
+function take_random(list) { return list[random_number(0, list.length)]; }
+function get_from_templates(temp, topic) {
+    return take_random(temp)
+            .replaceAll('{topic}', topic)
+            .replaceAll('{year}', random_number(3, 100).toString())
+            .replaceAll('{randA}', () => take_random(listA))
+            .replaceAll('{randB}', () => take_random(listB));
+}
+
+function generate() {
+    let topic = document.querySelector('input').value;
+    let text = [];
+    let begin_num = random_number(1, 2);
+    let middle_num = random_number(2, 3);
+    for (let i = 0; i < begin_num; i += 1) {
+        text.push(get_from_templates(begin, topic));
+    }
+    for (let i = 0; i < middle_num; i += 1) {
+        text.push(get_from_templates(middle, topic));
+    }
+    document.querySelector("#Kalsit").innerHTML = "<div>" + text.join("") + "</div>";
+}
+</script>
+<style> div { margin:0.5cm 2cm 0.5cm 2cm; } </style>
+</head>
+
+<body>
+    <center>
+        <div>Kal'sit generator</div>
+        <div>主题：<input value="经验加三"></input></div>
+        <div><button onclick="generate()">生成</button></div>
+    </center>
+        <div id="Kalsit"></div>
+</body>
+</html>
